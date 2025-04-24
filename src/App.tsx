@@ -1,0 +1,71 @@
+import { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import Layout from './components/layout/Layout';
+import AuthLayout from './components/layout/AuthLayout';
+import LoadingScreen from './components/ui/LoadingScreen';
+
+// Lazy-loaded components
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
+const NewApplication = lazy(() => import('./pages/applications/NewApplication'));
+const ApplicationDetails = lazy(() => import('./pages/applications/ApplicationDetails'));
+const Interviews = lazy(() => import('./pages/interviews/Interviews'));
+const Documents = lazy(() => import('./pages/documents/Documents'));
+const Profile = lazy(() => import('./pages/profile/Profile'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+function App() {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <Routes>
+        {/* Public routes */}
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
+          <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
+        </Route>
+
+        {/* Protected routes */}
+        <Route element={<Layout />}>
+          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
+          <Route 
+            path="/dashboard" 
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/applications/new" 
+            element={isAuthenticated ? <NewApplication /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/applications/:id" 
+            element={isAuthenticated ? <ApplicationDetails /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/interviews" 
+            element={isAuthenticated ? <Interviews /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/documents" 
+            element={isAuthenticated ? <Documents /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/profile" 
+            element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} 
+          />
+        </Route>
+
+        {/* Catch-all route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+export default App;
