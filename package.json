@@ -1,7 +1,6 @@
 {
     "name": "veritas-careers-portal",
     "homepage": "https://shwetankagarwal.github.io/Veritas-Careers-Application-Portal/",
-    "private": true,
     "version": "0.1.0",
     "type": "module",
     "scripts": {
