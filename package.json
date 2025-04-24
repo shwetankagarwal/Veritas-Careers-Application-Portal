@@ -1,15 +1,12 @@
 {
     "name": "veritas-careers-portal",
-    "homepage": "https://shwetankagarwal.github.io/Veritas-Careers-Application-Portal/",
     "version": "0.1.0",
     "type": "module",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint .",
-        "preview": "vite preview",
-        "predeploy" : "npm run build",
-        "deploy" : "gh-pages -d dist"
+        "preview": "vite preview"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.3.4",
