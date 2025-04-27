@@ -8,12 +8,19 @@ import LoadingScreen from './components/ui/LoadingScreen';
 // Lazy-loaded components
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
+const CompanyLogin = lazy(() => import('./pages/auth/CompanyLogin'));
+const CompanyRegister = lazy(() => import('./pages/auth/CompanyRegister'));
 const Dashboard = lazy(() => import('./pages/dashboard/Dashboard'));
+const Applications = lazy(() => import('./pages/applications/Applications'));
 const NewApplication = lazy(() => import('./pages/applications/NewApplication'));
 const ApplicationDetails = lazy(() => import('./pages/applications/ApplicationDetails'));
 const Interviews = lazy(() => import('./pages/interviews/Interviews'));
 const Documents = lazy(() => import('./pages/documents/Documents'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
+const CompanyDashboard = lazy(() => import('./pages/company/CompanyDashboard'));
+const CompanyApplications = lazy(() => import('./pages/company/CompanyApplications'));
+const CompanyApplicationDetails = lazy(() => import('./pages/company/CompanyApplicationDetails'));
+const JobForm = lazy(() => import('./pages/company/JobForm'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
@@ -30,6 +37,8 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
           <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
+          <Route path="/company/login" element={<CompanyLogin />} />
+          <Route path="/company/register" element={<CompanyRegister />} />
         </Route>
 
         {/* Protected routes */}
@@ -38,6 +47,10 @@ function App() {
           <Route 
             path="/dashboard" 
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} 
+          />
+          <Route 
+            path="/applications" 
+            element={isAuthenticated ? <Applications /> : <Navigate to="/login" />} 
           />
           <Route 
             path="/applications/new" 
@@ -59,6 +72,12 @@ function App() {
             path="/profile" 
             element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} 
           />
+          
+          {/* Company routes */}
+          <Route path="/company/dashboard" element={<CompanyDashboard />} />
+          <Route path="/company/applications" element={<CompanyApplications />} />
+          <Route path="/company/applications/:id" element={<CompanyApplicationDetails />} />
+          <Route path="/company/jobs/new" element={<JobForm />} />
         </Route>
 
         {/* Catch-all route */}
