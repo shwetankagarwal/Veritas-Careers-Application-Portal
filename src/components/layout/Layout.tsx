@@ -4,12 +4,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
-const Layout = () => {
+interface LayoutProps {
+  isCompanyLayout?: boolean;
+}
+
+const Layout: React.FC<LayoutProps> = ({ isCompanyLayout = false }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleCloseSidebar = () => {
+    setSidebarOpen(false);
+  };
 
   return (
     <div className="h-screen flex flex-col bg-neutral-50">
-      <Navbar onMenuClick={() => setSidebarOpen(true)} />
+      <Navbar onMenuClick={() => setSidebarOpen(true)} isCompanyLayout={isCompanyLayout} />
       
       <div className="flex flex-1 overflow-hidden">
         {/* Mobile sidebar */}
@@ -24,7 +32,7 @@ const Layout = () => {
             >
               <motion.div 
                 className="fixed inset-0 bg-black bg-opacity-50"
-                onClick={() => setSidebarOpen(false)}
+                onClick={handleCloseSidebar}
               />
               <motion.div
                 className="relative flex flex-col w-80 max-w-[80%] h-full bg-white shadow-xl"
@@ -33,7 +41,7 @@ const Layout = () => {
                 exit={{ x: '-100%' }}
                 transition={{ type: 'spring', damping: 25, stiffness: 300 }}
               >
-                <Sidebar onClose={() => setSidebarOpen(false)} />
+                <Sidebar onClose={handleCloseSidebar} isCompanyLayout={isCompanyLayout} />
               </motion.div>
             </motion.div>
           )}
@@ -41,7 +49,7 @@ const Layout = () => {
 
         {/* Desktop sidebar */}
         <div className="hidden lg:flex lg:w-64 bg-white shadow-md">
-          <Sidebar onClose={() => {}} />
+          <Sidebar onClose={() => {}} isCompanyLayout={isCompanyLayout} />
         </div>
 
         {/* Main content */}

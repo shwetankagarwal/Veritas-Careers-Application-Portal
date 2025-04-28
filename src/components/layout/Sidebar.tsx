@@ -7,27 +7,39 @@ import {
   FileText, 
   User, 
   X, 
-  PlusCircle 
+  PlusCircle,
+  Building,
+  Users,
+  Briefcase
 } from 'lucide-react';
 
 interface SidebarProps {
   onClose: () => void;
+  isCompanyLayout?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onClose, isCompanyLayout = false }) => {
   const location = useLocation();
   
   const isActive = (path: string) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
-  const navigationItems = [
+  const userNavigationItems = [
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Applications', path: '/applications', icon: FileEdit },
     { name: 'Interviews', path: '/interviews', icon: Calendar },
     { name: 'Documents', path: '/documents', icon: FileText },
     { name: 'Profile', path: '/profile', icon: User },
   ];
+
+  const companyNavigationItems = [
+    { name: 'Dashboard', path: '/company/dashboard', icon: Building },
+    { name: 'Applications', path: '/company/applications', icon: Users },
+    { name: 'Jobs', path: '/company/jobs', icon: Briefcase },
+  ];
+
+  const navigationItems = isCompanyLayout ? companyNavigationItems : userNavigationItems;
 
   return (
     <div className="flex flex-col h-full w-full bg-white">
@@ -65,16 +77,29 @@ const Sidebar: React.FC<SidebarProps> = ({ onClose }) => {
         </nav>
       </div>
       
-      <div className="p-4">
-        <Link
-          to="/applications/new"
-          className="flex items-center justify-center w-full px-4 py-3 text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors shadow-sm"
-          onClick={onClose}
-        >
-          <PlusCircle className="h-5 w-5 mr-2" />
-          <span className="font-medium">New Application</span>
-        </Link>
-      </div>
+      {isCompanyLayout ? (
+        <div className="p-4">
+          <Link
+            to="/company/jobs/new"
+            className="flex items-center justify-center w-full px-4 py-3 text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors shadow-sm"
+            onClick={onClose}
+          >
+            <PlusCircle className="h-5 w-5 mr-2" />
+            <span className="font-medium">Post New Job</span>
+          </Link>
+        </div>
+      ) : (
+        <div className="p-4">
+          <Link
+            to="/applications/new"
+            className="flex items-center justify-center w-full px-4 py-3 text-white bg-primary-600 rounded-md hover:bg-primary-700 transition-colors shadow-sm"
+            onClick={onClose}
+          >
+            <PlusCircle className="h-5 w-5 mr-2" />
+            <span className="font-medium">New Application</span>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
